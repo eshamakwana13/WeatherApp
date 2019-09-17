@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
     String city;
     String lat, lng;
     String temp, humid, wind, precip;
+    TextView t, h, w, p;
+
+    String GOOGLE_API_KEY = "";
+    String DARK_SKI_API_KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         cityView = findViewById(R.id.address);
+        t = findViewById(R.id.tempValue);
+        h = findViewById(R.id.humidityValue);
+        w = findViewById(R.id.windValue);
+        p = findViewById(R.id.precipValue);
     }
 
     public void getWeather(View v) {
         city = cityView.getText().toString().replaceAll(" ", "+");
         new URLRequest().execute();
+        System.out.println("Made it");
     }
 
     private class URLRequest extends AsyncTask<Void,Void,Void> {
@@ -42,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=AIzaSyBALCpGFgQeiST5YCjuLTF_za0NkQFy01Y";
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=" + GOOGLE_API_KEY;
 
             String response = request(url);
 
@@ -55,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(city);
             System.out.println(response);
 
-            url = "https://api.darksky.net/forecast/e04408a5798706aa9a220ea44bdfb784/" + lat + "," + lng;
+            url = "https://api.darksky.net/forecast/" +DARK_SKI_API_KEY + "/" + lat + "," + lng;
 
             response = request(url);
 
@@ -65,6 +74,16 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(e);
             }
             System.out.println(response);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    t.setText(temp);
+                    h.setText(humid);
+                    w.setText(wind);
+                    p.setText(precip);
+                }
+            });
 
             return null;
         }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="no_data">--</string>
+    <string name="humidity_placeholder">HUMIDITY</string>
+    <string name="temp_placeholder">TEMPERATURE</string>
+    <string name="wind_placeholder">WIND SPEED</string>
+    <string name="precip_placeholder">PRECIPITATION</string>
 </resources>
