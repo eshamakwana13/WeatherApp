@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="319dp"
-        android:layout_height="239dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address"
-        app:layout_constraintVertical_bias="0.865" />
-
     <EditText
         android:id="@+id/address"
         android:layout_width="317dp"
@@ -26,19 +16,131 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102" />
+        app:layout_constraintVertical_bias="0.074" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
         android:onClick="getWeather"
+        android:text="Submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.854"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/address"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TableLayout
+        android:layout_width="316dp"
+        android:layout_height="245dp"
+        android:stretchColumns="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.073">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/temp_placeholder" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/humidity_placeholder" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/tempValue"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/no_data"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/humidityValue"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/no_data"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/wind_placeholder" />
+
+            <TextView
+                android:id="@+id/precip"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/precip_placeholder" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/windValue"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/no_data"
+                android:textSize="50sp" />
+
+            <TextView
+                android:id="@+id/precipValue"
+                android:layout_width="159dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/no_data"
+                android:textSize="50sp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="310dp"
+        android:layout_height="187dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address"
+        app:layout_constraintVertical_bias="0.884"
+        tools:context=".MapsActivity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

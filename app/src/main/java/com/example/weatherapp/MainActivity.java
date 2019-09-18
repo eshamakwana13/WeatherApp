@@ -16,11 +16,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     EditText cityView;
     String city;
     String lat, lng;
     String temp, humid, wind, precip;
+    TextView t, h, w, p;
+
+    String GOOGLE_API_KEY = "";
+    String DARK_SKI_API_KEY = "";
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +42,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         cityView = findViewById(R.id.address);
+        t = findViewById(R.id.tempValue);
+        h = findViewById(R.id.humidityValue);
+        w = findViewById(R.id.windValue);
+        p = findViewById(R.id.precipValue);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void getWeather(View v) {
         city = cityView.getText().toString().replaceAll(" ", "+");
+        System.out.println("Made it");
         new URLRequest().execute();
+        System.out.println("Made it");
     }
 
     private class URLRequest extends AsyncTask<Void,Void,Void> {
@@ -42,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=AIzaSyBALCpGFgQeiST5YCjuLTF_za0NkQFy01Y";
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=" + GOOGLE_API_KEY;
 
             String response = request(url);
 
@@ -55,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(city);
             System.out.println(response);
 
-            url = "https://api.darksky.net/forecast/e04408a5798706aa9a220ea44bdfb784/" + lat + "," + lng;
+            url = "https://api.darksky.net/forecast/" +DARK_SKI_API_KEY + "/" + lat + "," + lng;
 
             response = request(url);
 
@@ -65,6 +89,20 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(e);
             }
             System.out.println(response);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    t.setText(temp);
+                    h.setText(humid);
+                    w.setText(wind);
+                    p.setText(precip);
+
+                    LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+                    mMap.addMarker(new MarkerOptions().position(loc));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
+                }
+            });
 
             return null;
         }
@@ -116,5 +154,15 @@ public class MainActivity extends AppCompatActivity {
         precip = current.getString("precipProbability");
 
         System.out.println(temp + ", " + humid + ", " + wind + ", " + precip);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
