@@ -16,7 +16,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     EditText cityView;
     String city;
     String lat, lng;
@@ -25,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     String GOOGLE_API_KEY = "";
     String DARK_SKI_API_KEY = "";
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +46,15 @@ public class MainActivity extends AppCompatActivity {
         h = findViewById(R.id.humidityValue);
         w = findViewById(R.id.windValue);
         p = findViewById(R.id.precipValue);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void getWeather(View v) {
         city = cityView.getText().toString().replaceAll(" ", "+");
+        System.out.println("Made it");
         new URLRequest().execute();
         System.out.println("Made it");
     }
@@ -82,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                     h.setText(humid);
                     w.setText(wind);
                     p.setText(precip);
+
+                    LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+                    mMap.addMarker(new MarkerOptions().position(loc));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
                 }
             });
 
@@ -135,5 +154,15 @@ public class MainActivity extends AppCompatActivity {
         precip = current.getString("precipProbability");
 
         System.out.println(temp + ", " + humid + ", " + wind + ", " + precip);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }
